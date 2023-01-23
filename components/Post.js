@@ -121,7 +121,7 @@ const Post = ({ id, name, userImg, postImg, caption }) => {
           <BookmarkIcon className='headerIcon h-7' />
         </div>
       )}
-      <p className='px-5 truncate'>
+      <p className={`px-5 truncate ${!session && 'py-2'}`}>
         {likes.length > 0 && (
           <p className='font-bold mb-1'>
             {likes.length}
