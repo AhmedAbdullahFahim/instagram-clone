@@ -24,24 +24,13 @@ const Header = ({ inLogIn }) => {
       <div className='max-w-6xl flex justify-between mx-5 lg:mx-auto py-2 sm:py-0 items-center'>
         <div
           onClick={() => router.push('/')}
-          className='relative hidden md:inline-grid h-10 w-24 cursor-pointer'
+          className='relative inline-grid h-8 sm:h-10 w-24 cursor-pointer'
         >
           <Image
             src='https://links.papareact.com/ocw'
             fill
             className='object-contain'
             alt='instagram'
-          />
-        </div>
-        <div
-          onClick={() => router.push('/')}
-          className='relative h-8 md:hidden w-10 flex-shrink-0 cursor-pointer'
-        >
-          <Image
-            src='https://links.papareact.com/jjm'
-            fill
-            className='object-contain'
-            alt='logo'
           />
         </div>
         <div className='hidden sm:inline-flex max-w-sm'>
@@ -59,7 +48,6 @@ const Header = ({ inLogIn }) => {
         <div className='flex items-center justify-end space-x-4'>
           {session ? (
             <>
-              <HomeIcon className='headerIcon mr-1' />
               <div className='relative'>
                 <PaperAirplaneIcon className='headerIcon -rotate-45' />
                 <div className='absolute -top-1 -right-2 text-xs h-5 w-5 bg-red-500 rounded-full justify-center flex items-center text-white animate-pulse'>
