@@ -24,7 +24,7 @@ const Header = ({ inLogIn }) => {
       <div className='max-w-6xl flex justify-between mx-5 lg:mx-auto py-2 sm:py-0 items-center'>
         <div
           onClick={() => router.push('/')}
-          className='relative inline-grid h-8 sm:h-10 w-24 cursor-pointer'
+          className='relative inline-grid h-10 w-24 cursor-pointer'
         >
           <Image
             src='https://links.papareact.com/ocw'
