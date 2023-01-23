@@ -48,18 +48,17 @@ const Header = ({ inLogIn }) => {
         <div className='flex items-center justify-end space-x-4'>
           {session ? (
             <>
+              <PlusCircleIcon
+                onClick={() => setIsOpen(true)}
+                className='headerIcon'
+              />
+              <HeartIcon className='headerIcon' />
               <div className='relative'>
                 <PaperAirplaneIcon className='headerIcon -rotate-45' />
                 <div className='absolute -top-1 -right-2 text-xs h-5 w-5 bg-red-500 rounded-full justify-center flex items-center text-white animate-pulse'>
                   3
                 </div>
               </div>
-              <PlusCircleIcon
-                onClick={() => setIsOpen(true)}
-                className='headerIcon'
-              />
-              <UserGroupIcon className='headerIcon' />
-              <HeartIcon className='headerIcon' />
               <Menu>
                 <Menu.Button>
                   <img
