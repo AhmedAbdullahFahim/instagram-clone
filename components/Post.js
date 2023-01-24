@@ -7,11 +7,9 @@ import {
   FaceSmileIcon,
 } from '@heroicons/react/24/outline'
 
-import Moment from 'react-moment'
-
 import { HeartIcon as HeartIconFilled } from '@heroicons/react/24/solid'
 import { useSession } from 'next-auth/react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { db } from '@/firebase'
 import {
   addDoc,
@@ -24,14 +22,23 @@ import {
   serverTimestamp,
   setDoc,
 } from 'firebase/firestore'
+import Comment from './Comment'
+import LikesModal from './LikesModal'
+import { useRecoilState, useSetRecoilState } from 'recoil'
+import { likesModalState } from '@/atoms/likesModalAtom'
+import { likesState } from '@/atoms/likesAtom'
 
-const Post = ({ id, name, userImg, postImg, caption }) => {
+const Post = ({ id, name, userImg, postImg, caption, setPeople }) => {
   const [showDots, setShowDots] = useState(false)
   const [comment, setComment] = useState('')
   const [comments, setComments] = useState([])
   const [likes, setLikes] = useState([])
   const [liked, setLiked] = useState(false)
+  const [seeMoreCaption, setSeeMoreCaption] = useState(false)
+  const [showLikesModal, setShowLikesModal] = useRecoilState(likesModalState)
+  const setPeopleLikes = useSetRecoilState(likesState)
   const { data: session } = useSession()
+  const commentRef = useRef(null)
 
   useEffect(
     () =>
@@ -47,9 +54,9 @@ const Post = ({ id, name, userImg, postImg, caption }) => {
 
   useEffect(
     () =>
-      onSnapshot(collection(db, 'posts', id, 'likes'), (snapshot) =>
+      onSnapshot(collection(db, 'posts', id, 'likes'), (snapshot) => {
         setLikes(snapshot.docs)
-      ),
+      }),
     [db, id]
   )
 
@@ -67,6 +74,8 @@ const Post = ({ id, name, userImg, postImg, caption }) => {
     } else {
       await setDoc(doc(db, 'posts', id, 'likes', session.user.uid), {
         username: session.user.username,
+        profileImage: session.user.image,
+        name: session.user.name,
       })
     }
   }
@@ -115,41 +124,59 @@ const Post = ({ id, name, userImg, postImg, caption }) => {
             ) : (
               <HeartIcon className='headerIcon h-7' onClick={likePost} />
             )}
-            <ChatBubbleOvalLeftEllipsisIcon className='headerIcon h-7' />
-            <PaperAirplaneIcon className='headerIcon h-7 -rotate-90' />
+            <ChatBubbleOvalLeftEllipsisIcon
+              onClick={() => commentRef.current.focus()}
+              className='headerIcon h-7'
+            />
+            <PaperAirplaneIcon className='headerIcon h-7 -rotate-45' />
           </div>
           <BookmarkIcon className='headerIcon h-7' />
         </div>
       )}
-      <p className={`px-5 truncate ${!session && 'py-2'}`}>
+      <div className={`px-5 overflow-hidden ${!session && 'py-2'} mb-3`}>
         {likes.length > 0 && (
           <p className='font-bold mb-1'>
-            {likes.length}
-            {likes.length === 1 ? ' like' : ' likes'}
+            <span
+              className='cursor-pointer hover:underline'
+              onClick={() => {
+                setShowLikesModal(true)
+                setPeople(likes)
+              }}
+            >
+              {likes.length}
+              {likes.length === 1 ? ' like' : ' likes'}
+            </span>
           </p>
         )}
         <span className='font-bold mr-2'>{name}</span>
-        {caption}
-      </p>
+        {seeMoreCaption ? (
+          <>
+            {caption}{' '}
+            <span
+              className='text-gray-400 cursor-pointer'
+              onClick={() => setSeeMoreCaption(false)}
+            >
+              less
+            </span>
+          </>
+        ) : (
+          <>
+            {caption.slice(0, 50).concat(' ')}
+            {caption.length < 50 || (
+              <span
+                className='text-gray-400 cursor-pointer'
+                onClick={() => setSeeMoreCaption(true)}
+              >
+                ...more
+              </span>
+            )}
+          </>
+        )}
+      </div>
       {comments.length > 0 && (
-        <div className='ml-10 h-20 overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-400'>
+        <div className='ml-10 h-fit max-h-24 overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-400'>
           {comments.map((comment) => (
-            <div className='flex items-center space-x-2 mt-2' key={comment.id}>
-              <img
-                alt=''
-                src={comment.data().profileImage}
-                className='h-7 rounded-full object-contain'
-              />
-              <p className='text-sm flex-1'>
-                <span className='font-semibold mr-1'>
-                  {comment.data().username}
-                </span>
-                {comment.data().comment}
-              </p>
-              <Moment fromNow className='text-xs pr-5 text-gray-500'>
-                {comment.data().timestamp?.toDate()}
-              </Moment>
-            </div>
+            <Comment key={comment.id} comment={comment} />
           ))}
         </div>
       )}
@@ -159,9 +186,10 @@ const Post = ({ id, name, userImg, postImg, caption }) => {
           <input
             type='text'
             placeholder='Add a comment...'
-            className='flex-1 border-none focus:ring-0 outline-none'
+            className='flex-1 border-none focus:ring-0 outline-none scroll-smooth'
             value={comment}
             onChange={(e) => setComment(e.target.value)}
+            ref={commentRef}
           />
           <button
             type='submit'

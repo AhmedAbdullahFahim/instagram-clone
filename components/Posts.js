@@ -3,7 +3,7 @@ import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import Post from './Post'
 
-const Posts = () => {
+const Posts = ({ setPeople }) => {
   const [posts, setPosts] = useState([])
 
   useEffect(
@@ -23,6 +23,7 @@ const Posts = () => {
         <Post
           key={post.id}
           id={post.id}
+          setPeople={setPeople}
           name={post.data().username}
           userImg={post.data().profileImg}
           postImg={post.data().image}

@@ -4,7 +4,7 @@ import Profile from './Profile'
 import Stories from './Stories'
 import Suggestions from './Suggestions'
 
-const Feed = () => {
+const Feed = ({ setPeople }) => {
   const { data: session } = useSession()
   return (
     <main
@@ -14,7 +14,7 @@ const Feed = () => {
     >
       <section className='col-span-2'>
         {session && <Stories />}
-        <Posts />
+        <Posts setPeople={setPeople} />
       </section>
       {session && (
         <section className='hidden xl:inline-grid md:col-span-1'>

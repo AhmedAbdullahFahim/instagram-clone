@@ -7,7 +7,6 @@ import {
   PaperAirplaneIcon,
   ArrowRightOnRectangleIcon,
 } from '@heroicons/react/24/outline'
-import { HomeIcon } from '@heroicons/react/24/solid'
 import { useSession, signOut, signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
@@ -20,7 +19,7 @@ const Header = ({ inLogIn }) => {
   const [isOpen, setIsOpen] = useRecoilState(modalState)
   const router = useRouter()
   return (
-    <div className='shadow-sm sticky top-0 z-50 border-b bg-white'>
+    <div className='shadow-sm sticky top-0 z-30 border-b bg-white'>
       <div className='max-w-6xl flex justify-between mx-5 lg:mx-auto py-2 sm:py-0 items-center'>
         <div
           onClick={() => router.push('/')}

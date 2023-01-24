@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+}
+
 @layer components {
   .headerIcon {
     @apply h-6 inline-flex transition-all hover:scale-125 duration-150 ease-out cursor-pointer;
