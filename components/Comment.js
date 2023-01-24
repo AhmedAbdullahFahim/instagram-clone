@@ -10,12 +10,15 @@ import {
 } from 'firebase/firestore'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
+import { useRecoilState } from 'recoil'
+import { likesModalState } from '@/atoms/likesModalAtom'
 import Moment from 'react-moment'
 
-const Comment = ({ comment, id }) => {
+const Comment = ({ comment, id, setPeople }) => {
   const [seeMoreComment, setSeeMoreComment] = useState(false)
   const [likes, setLikes] = useState([])
   const [liked, setLiked] = useState(false)
+  const [showLikesModal, setShowLikesModal] = useRecoilState(likesModalState)
 
   const { data: session } = useSession()
 
@@ -62,7 +65,7 @@ const Comment = ({ comment, id }) => {
         src={comment.data().profileImage}
         className='h-7 rounded-full object-contain'
       />
-      <div className='flex flex-1 flex-col'>
+      <div className='flex flex-1 flex-col space-y-1'>
         <p className='text-sm'>
           <span className='font-semibold mr-1'>{comment.data().username}</span>
           {seeMoreComment ? (
@@ -89,9 +92,20 @@ const Comment = ({ comment, id }) => {
             </>
           )}
         </p>
-        <Moment fromNow className='text-xs pr-5 text-gray-500'>
-          {comment.data().timestamp?.toDate()}
-        </Moment>
+        <div className='flex space-x-5 text-xs text-gray-500'>
+          <Moment fromNow>{comment.data().timestamp?.toDate()}</Moment>
+          {likes.length > 0 && (
+            <p
+              className='cursor-pointer hover:underline'
+              onClick={() => {
+                setShowLikesModal(true)
+                setPeople(likes)
+              }}
+            >
+              {likes.length} {likes.length > 1 ? 'likes' : 'like'}
+            </p>
+          )}
+        </div>
       </div>
       {liked ? (
         <HeartIconFilled

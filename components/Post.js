@@ -23,7 +23,7 @@ import {
   setDoc,
 } from 'firebase/firestore'
 import Comment from './Comment'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { likesModalState } from '@/atoms/likesModalAtom'
 
 const Post = ({ id, name, userImg, postImg, caption, setPeople }) => {
@@ -173,7 +173,12 @@ const Post = ({ id, name, userImg, postImg, caption, setPeople }) => {
       {comments.length > 0 && (
         <div className='ml-10 h-fit max-h-24 overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-400'>
           {comments.map((comment) => (
-            <Comment key={comment.id} comment={comment} id={id} />
+            <Comment
+              key={comment.id}
+              comment={comment}
+              id={id}
+              setPeople={setPeople}
+            />
           ))}
         </div>
       )}
