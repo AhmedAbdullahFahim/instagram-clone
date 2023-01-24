@@ -2,17 +2,14 @@ import Image from 'next/image'
 import {
   MagnifyingGlassIcon,
   PlusCircleIcon,
-  UserGroupIcon,
   HeartIcon,
   PaperAirplaneIcon,
-  ArrowRightOnRectangleIcon,
 } from '@heroicons/react/24/outline'
 import { useSession, signOut, signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { modalState } from '@/atoms/modalAtom'
-import { Menu, Transition } from '@headlessui/react'
-import { Fragment } from 'react'
+import DropdownMenu from './DropdownMenu'
 
 const Header = ({ inLogIn }) => {
   const { data: session } = useSession()
@@ -58,61 +55,10 @@ const Header = ({ inLogIn }) => {
                   3
                 </div>
               </div>
-              <Menu>
-                <Menu.Button>
-                  <img
-                    src={session.user.image}
-                    alt='user image'
-                    className='h-11 w-11 object-fit rounded-full cursor-pointer'
-                  />
-                </Menu.Button>
-                <Transition
-                  as={Fragment}
-                  enter='transition ease-out duration-100'
-                  enterFrom='transform opacity-0 scale-95'
-                  enterTo='transform opacity-100 scale-100'
-                  leave='transition ease-in duration-75'
-                  leaveFrom='transform opacity-100 scale-100'
-                  leaveTo='transform opacity-0 scale-95'
-                >
-                  <Menu.Items className='absolute right-30 top-12 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <div
-                          className={`${
-                            active ? 'bg-gray-200' : 'text-gray-900'
-                          } group flex space-x-3 font-medium w-full items-center rounded-md px-2 py-2 text-sm cursor-pointer`}
-                        >
-                          <img
-                            src={session.user.image}
-                            className='h-11 w-11 object-fit rounded-full cursor-pointer'
-                          />
-                          <p>{session.user.username}</p>
-                        </div>
-                      )}
-                    </Menu.Item>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <div
-                          className={`${
-                            active ? 'bg-gray-200' : 'text-gray-900'
-                          } group flex space-x-3 font-medium w-full items-center rounded-md px-2 py-2 text-sm cursor-pointer`}
-                          onClick={signOut}
-                        >
-                          <ArrowRightOnRectangleIcon className='h-10 w-10 p-2 bg-gray-200 rounded-full' />
-                          <p>Log Out</p>
-                        </div>
-                      )}
-                    </Menu.Item>
-                  </Menu.Items>
-                </Transition>
-              </Menu>
-              {/* <img
-                onClick={signOut}
-                src={session.user.image}
-                className='h-11 w-11 object-fit rounded-full cursor-pointer'
-                alt='profile'
-              /> */}
+              <DropdownMenu
+                image={session.user.image}
+                username={session.user.username}
+              />
             </>
           ) : (
             !inLogIn && (

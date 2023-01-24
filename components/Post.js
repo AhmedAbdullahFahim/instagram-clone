@@ -2,7 +2,7 @@ import {
   BookmarkIcon,
   HeartIcon,
   PaperAirplaneIcon,
-  EllipsisHorizontalIcon,
+  EllipsisVerticalIcon,
   ChatBubbleOvalLeftEllipsisIcon,
   FaceSmileIcon,
 } from '@heroicons/react/24/outline'
@@ -25,9 +25,9 @@ import {
 import Comment from './Comment'
 import { useRecoilState } from 'recoil'
 import { likesModalState } from '@/atoms/likesModalAtom'
+import DropdownMenu from './DropdownMenu'
 
 const Post = ({ id, name, userImg, postImg, caption, setPeople }) => {
-  const [showDots, setShowDots] = useState(false)
   const [comment, setComment] = useState('')
   const [comments, setComments] = useState([])
   const [likes, setLikes] = useState([])
@@ -90,19 +90,15 @@ const Post = ({ id, name, userImg, postImg, caption, setPeople }) => {
   }
 
   return (
-    <div
-      onMouseOver={() => setShowDots(true)}
-      onMouseLeave={() => setShowDots(false)}
-      className='bg-white my-7 shadow-sm border rounded-sm'
-    >
-      <div className='p-5 flex items-center'>
+    <div className='bg-white my-7 shadow-sm border rounded-sm'>
+      <div className='p-5 flex items-center relative'>
         <img
           src={userImg}
           alt=''
           className='h-12 w-12 rounded-full object-contain mr-3'
         />
         <p className='font-semibold flex-1'>{name}</p>
-        {showDots && <EllipsisHorizontalIcon className='h-7 cursor-pointer' />}
+        <DropdownMenu id={id} />
       </div>
       <img
         src={postImg}

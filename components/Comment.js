@@ -109,11 +109,11 @@ const Comment = ({ comment, id, setPeople }) => {
       </div>
       {liked ? (
         <HeartIconFilled
-          className='h-4 pr-5 cursor-pointer text-red-500'
+          className='h-5 pr-5 cursor-pointer text-red-500'
           onClick={likeComment}
         />
       ) : (
-        <HeartIcon className='h-4 pr-5 cursor-pointer' onClick={likeComment} />
+        <HeartIcon className='h-5 pr-5 cursor-pointer' onClick={likeComment} />
       )}
     </div>
   )
