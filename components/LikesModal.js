@@ -68,7 +68,7 @@ const LikesModal = ({ likes }) => {
                           {like.data().name}
                         </p>
                       </div>
-                      <p className='bg-blue-500 text-white flex items-center justify-center h-fit px-6 py-1 rounded-xl'>
+                      <p className='bg-blue-500 text-white flex items-center justify-center h-fit px-6 py-1 rounded-xl cursor-pointer'>
                         Follow
                       </p>
                     </div>
