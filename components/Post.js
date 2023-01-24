@@ -23,10 +23,8 @@ import {
   setDoc,
 } from 'firebase/firestore'
 import Comment from './Comment'
-import LikesModal from './LikesModal'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 import { likesModalState } from '@/atoms/likesModalAtom'
-import { likesState } from '@/atoms/likesAtom'
 
 const Post = ({ id, name, userImg, postImg, caption, setPeople }) => {
   const [showDots, setShowDots] = useState(false)
@@ -36,7 +34,6 @@ const Post = ({ id, name, userImg, postImg, caption, setPeople }) => {
   const [liked, setLiked] = useState(false)
   const [seeMoreCaption, setSeeMoreCaption] = useState(false)
   const [showLikesModal, setShowLikesModal] = useRecoilState(likesModalState)
-  const setPeopleLikes = useSetRecoilState(likesState)
   const { data: session } = useSession()
   const commentRef = useRef(null)
 

@@ -1,4 +1,3 @@
-import { likesState } from '@/atoms/likesAtom'
 import { likesModalState } from '@/atoms/likesModalAtom'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
