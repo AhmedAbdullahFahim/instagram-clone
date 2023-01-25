@@ -118,12 +118,20 @@ const Post = ({
           <DropdownMenu setPostId={setPostId} id={id} email={email} />
         )}
       </div>
-      <img
-        src={postImg}
-        className='object-cover w-full'
-        alt=''
-        onDoubleClick={likePost}
-      />
+      <div className='w-full relative select-none' onDoubleClick={likePost}>
+        <img src={postImg} className='object-cover w-full' alt='' />
+        <div
+          className={`${
+            liked && 'delay-700 scale-0'
+          } transition-all duration-300 ease-out absolute inset-0 flex items-center justify-center`}
+        >
+          <HeartIconFilled
+            className={` ${
+              liked ? 'scale-100' : 'scale-0'
+            } transition-all duration-300 ease-out text-red-500 w-16 sm:w-20`}
+          />
+        </div>
+      </div>
       {session && (
         <div className='flex justify-between p-4 items-center'>
           <div className='flex space-x-4'>

@@ -73,7 +73,7 @@ const DropdownMenu = ({ image, username, id, email, setPostId }) => {
             </Menu.Item>
           </Menu.Items>
         ) : (
-          <Menu.Items className='absolute right-5 top-12 mt-3 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
+          <Menu.Items className='absolute right-5 top-12 mt-3 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10'>
             <Menu.Item>
               {({ active }) => (
                 <div
