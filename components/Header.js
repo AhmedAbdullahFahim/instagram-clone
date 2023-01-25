@@ -10,10 +10,14 @@ import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { modalState } from '@/atoms/modalAtom'
 import DropdownMenu from './DropdownMenu'
+import { deleteModalState } from '@/atoms/deleteModalAtom'
+import { likesModalState } from '@/atoms/likesModalAtom'
 
 const Header = ({ inLogIn }) => {
   const { data: session } = useSession()
   const [isOpen, setIsOpen] = useRecoilState(modalState)
+  const [openDeleteModal, setOpenDeleteModal] = useRecoilState(deleteModalState)
+  const [openLikesModal, setOpenLikesModal] = useRecoilState(likesModalState)
   const router = useRouter()
   return (
     <div className='shadow-sm sticky top-0 z-30 border-b bg-white'>
@@ -45,7 +49,11 @@ const Header = ({ inLogIn }) => {
           {session ? (
             <>
               <PlusCircleIcon
-                onClick={() => setIsOpen(true)}
+                onClick={() => {
+                  setIsOpen(true)
+                  setOpenDeleteModal(false)
+                  setOpenLikesModal(false)
+                }}
                 className='headerIcon'
               />
               <HeartIcon className='headerIcon' />

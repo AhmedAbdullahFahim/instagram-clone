@@ -3,7 +3,7 @@ import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import Post from './Post'
 
-const Posts = ({ setPeople }) => {
+const Posts = ({ setPeople, setPostId }) => {
   const [posts, setPosts] = useState([])
 
   useEffect(
@@ -28,6 +28,8 @@ const Posts = ({ setPeople }) => {
           userImg={post.data().profileImg}
           postImg={post.data().image}
           caption={post.data().caption}
+          email={post.data().email}
+          setPostId={setPostId}
         />
       ))}
     </div>

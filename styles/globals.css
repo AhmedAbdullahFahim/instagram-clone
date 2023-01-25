@@ -12,4 +12,7 @@
   .headerIcon {
     @apply h-6 inline-flex transition-all hover:scale-125 duration-150 ease-out cursor-pointer;
   }
+  .modalButton {
+    @apply bg-blue-700 text-white py-2 px-5 rounded-md mt-3 hover:bg-blue-900 transition-all duration-150 ease-in-out text-sm sm:text-base;
+  }
 }

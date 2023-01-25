@@ -13,12 +13,16 @@ import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { likesModalState } from '@/atoms/likesModalAtom'
 import Moment from 'react-moment'
+import { deleteModalState } from '@/atoms/deleteModalAtom'
+import { modalState } from '@/atoms/modalAtom'
 
 const Comment = ({ comment, id, setPeople }) => {
   const [seeMoreComment, setSeeMoreComment] = useState(false)
   const [likes, setLikes] = useState([])
   const [liked, setLiked] = useState(false)
-  const [showLikesModal, setShowLikesModal] = useRecoilState(likesModalState)
+  const [openDeleteModal, setOpenDeleteModal] = useRecoilState(deleteModalState)
+  const [openLikesModal, setOpenLikesModal] = useRecoilState(likesModalState)
+  const [isOpen, setIsOpen] = useRecoilState(modalState)
 
   const { data: session } = useSession()
 
@@ -98,8 +102,10 @@ const Comment = ({ comment, id, setPeople }) => {
             <p
               className='cursor-pointer hover:underline'
               onClick={() => {
-                setShowLikesModal(true)
                 setPeople(likes)
+                setIsOpen(true)
+                setOpenLikesModal(true)
+                setOpenDeleteModal(false)
               }}
             >
               {likes.length} {likes.length > 1 ? 'likes' : 'like'}

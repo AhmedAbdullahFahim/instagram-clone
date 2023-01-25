@@ -2,8 +2,7 @@ import {
   BookmarkIcon,
   HeartIcon,
   PaperAirplaneIcon,
-  EllipsisVerticalIcon,
-  ChatBubbleOvalLeftEllipsisIcon,
+  ChatBubbleOvalLeftIcon,
   FaceSmileIcon,
 } from '@heroicons/react/24/outline'
 
@@ -26,14 +25,27 @@ import Comment from './Comment'
 import { useRecoilState } from 'recoil'
 import { likesModalState } from '@/atoms/likesModalAtom'
 import DropdownMenu from './DropdownMenu'
+import { deleteModalState } from '@/atoms/deleteModalAtom'
+import { modalState } from '@/atoms/modalAtom'
 
-const Post = ({ id, name, userImg, postImg, caption, setPeople }) => {
+const Post = ({
+  id,
+  name,
+  userImg,
+  postImg,
+  caption,
+  setPeople,
+  email,
+  setPostId,
+}) => {
   const [comment, setComment] = useState('')
   const [comments, setComments] = useState([])
   const [likes, setLikes] = useState([])
   const [liked, setLiked] = useState(false)
   const [seeMoreCaption, setSeeMoreCaption] = useState(false)
-  const [showLikesModal, setShowLikesModal] = useRecoilState(likesModalState)
+  const [openDeleteModal, setOpenDeleteModal] = useRecoilState(deleteModalState)
+  const [openLikesModal, setOpenLikesModal] = useRecoilState(likesModalState)
+  const [isOpen, setIsOpen] = useRecoilState(modalState)
   const { data: session } = useSession()
   const commentRef = useRef(null)
 
@@ -64,6 +76,10 @@ const Post = ({ id, name, userImg, postImg, caption, setPeople }) => {
       ),
     [likes]
   )
+
+  // useEffect(() => {
+  //   setPostId(id)
+  // }, [id])
 
   const likePost = async () => {
     if (liked) {
@@ -98,7 +114,9 @@ const Post = ({ id, name, userImg, postImg, caption, setPeople }) => {
           className='h-12 w-12 rounded-full object-contain mr-3'
         />
         <p className='font-semibold flex-1'>{name}</p>
-        <DropdownMenu id={id} />
+        {session && (
+          <DropdownMenu setPostId={setPostId} id={id} email={email} />
+        )}
       </div>
       <img
         src={postImg}
@@ -117,7 +135,7 @@ const Post = ({ id, name, userImg, postImg, caption, setPeople }) => {
             ) : (
               <HeartIcon className='headerIcon h-7' onClick={likePost} />
             )}
-            <ChatBubbleOvalLeftEllipsisIcon
+            <ChatBubbleOvalLeftIcon
               onClick={() => commentRef.current.focus()}
               className='headerIcon h-7'
             />
@@ -132,7 +150,10 @@ const Post = ({ id, name, userImg, postImg, caption, setPeople }) => {
             <span
               className='cursor-pointer hover:underline'
               onClick={() => {
-                setShowLikesModal(true)
+                setIsOpen(true)
+                setOpenDeleteModal(false)
+                setOpenLikesModal(true)
+                setPostId(id)
                 setPeople(likes)
               }}
             >
