@@ -201,18 +201,18 @@ const Modal = ({ likes, postId }) => {
                     </p>
                   </div>
                   <hr className='mt-1 w-full' />
-                  <div className='w-full flex flex-col py-3 items-center justify-center space-y-5'>
+                  <div className='w-full flex flex-col py-3 items-center space-y-5'>
                     {likes.map((like) => (
                       <div
                         key={like.id}
-                        className='flex items-center justify-center space-x-2 w-full'
+                        className='flex items-center space-x-2 w-full'
                       >
                         <img
                           src={like.data().profileImage}
                           alt=''
                           className='h-12 w-12 rounded-full object-contain'
                         />
-                        <div className='flex flex-1 flex-col items-center justify-center'>
+                        <div className='flex flex-1 flex-col'>
                           <p className='text-xs sm:text-sm font-medium'>
                             {like.data().username}
                           </p>
