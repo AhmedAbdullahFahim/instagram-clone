@@ -122,13 +122,13 @@ const Post = ({
         <img src={postImg} className='object-cover w-full' alt='' />
         <div
           className={`${
-            liked && 'delay-700 scale-0'
-          } transition-all duration-300 ease-out absolute inset-0 flex items-center justify-center`}
+            liked && 'delay-1000 opacity-0'
+          } transition-all duration-300 ease-out absolute inset-0 flex items-center justify-center select-none`}
         >
           <HeartIconFilled
             className={` ${
-              liked ? 'scale-100' : 'scale-0'
-            } transition-all duration-300 ease-out text-red-500 w-16 sm:w-20`}
+              liked ? 'scale-100' : 'delay-300 opacity-100 scale-0'
+            } transition-all duration-300 ease-out text-red-500 w-16 sm:w-20 select-none`}
           />
         </div>
       </div>
