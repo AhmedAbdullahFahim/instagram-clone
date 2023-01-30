@@ -168,7 +168,7 @@ const Modal = ({ likes, postId }) => {
                           onClick={() => setOpenEmojis(!openEmojis)}
                         />
                       </div>
-                      <div className='z-10 flex overflow-x-scroll items-center justify-center'>
+                      <div className='z-10 flex justify-center'>
                         {openEmojis && (
                           <EmojiPicker
                             emojiStyle='google'
@@ -176,6 +176,7 @@ const Modal = ({ likes, postId }) => {
                             height={'20rem'}
                             onEmojiClick={handleEmoji}
                             skinTonePickerLocation='PREVIEW'
+                            autoFocusSearch={false}
                           />
                         )}
                       </div>

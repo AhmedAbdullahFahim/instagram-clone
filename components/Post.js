@@ -246,6 +246,7 @@ const Post = ({
                 height={'25rem'}
                 onEmojiClick={handleEmoji}
                 skinTonePickerLocation='PREVIEW'
+                autoFocusSearch={false}
               />
             )}
           </div>
