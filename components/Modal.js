@@ -17,10 +17,11 @@ import { modalState } from '@/atoms/modalAtom'
 import { useRecoilState } from 'recoil'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useRef, useState } from 'react'
-import { CameraIcon } from '@heroicons/react/24/outline'
+import { CameraIcon, FaceSmileIcon } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
 import { deleteModalState } from '@/atoms/deleteModalAtom'
 import { likesModalState } from '@/atoms/likesModalAtom'
+import EmojiPicker from 'emoji-picker-react'
 
 const Modal = ({ likes, postId }) => {
   const [isOpen, setIsOpen] = useRecoilState(modalState)
@@ -30,6 +31,7 @@ const Modal = ({ likes, postId }) => {
   const captionRef = useRef(null)
   const [selectedFile, setSelectedFile] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [openEmojis, setOpenEmojis] = useState(false)
   const { data: session } = useSession()
 
   const addImageToPost = (e) => {
@@ -40,6 +42,10 @@ const Modal = ({ likes, postId }) => {
     reader.onload = (readerEvent) => {
       setSelectedFile(readerEvent.target.result)
     }
+  }
+
+  const handleEmoji = (emojiData, e) => {
+    captionRef.current.value = captionRef.current.value + emojiData.emoji
   }
 
   const uploadPost = async () => {
@@ -133,12 +139,14 @@ const Modal = ({ likes, postId }) => {
                   )}
                   <div>
                     <div className='mt-3 text-center sm:mt-5'>
-                      <Dialog.Title
-                        as='h3'
-                        className='text-lg leading-6 font-medium text-gray-900'
-                      >
-                        Upload a photo
-                      </Dialog.Title>
+                      {!selectedFile && (
+                        <Dialog.Title
+                          as='h3'
+                          className='text-lg leading-6 font-medium text-gray-900'
+                        >
+                          Upload a photo
+                        </Dialog.Title>
+                      )}
                       <div>
                         <input
                           ref={filePickerRef}
@@ -147,13 +155,29 @@ const Modal = ({ likes, postId }) => {
                           onChange={addImageToPost}
                         />
                       </div>
-                      <div className='mt-2'>
+                      <div className='flex items-center mt-2'>
                         <input
                           type='text'
                           className='border-none focus:ring-0 w-full text-center'
                           ref={captionRef}
                           placeholder='Enter a caption for your post...'
+                          onFocus={() => setOpenEmojis(false)}
                         />
+                        <FaceSmileIcon
+                          className='h-7 cursor-pointer'
+                          onClick={() => setOpenEmojis(!openEmojis)}
+                        />
+                      </div>
+                      <div className='z-10 flex overflow-x-scroll items-center justify-center'>
+                        {openEmojis && (
+                          <EmojiPicker
+                            emojiStyle='google'
+                            width={'22rem'}
+                            height={'20rem'}
+                            onEmojiClick={handleEmoji}
+                            skinTonePickerLocation='PREVIEW'
+                          />
+                        )}
                       </div>
                     </div>
                   </div>

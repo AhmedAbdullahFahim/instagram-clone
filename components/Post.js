@@ -21,10 +21,11 @@ import {
   serverTimestamp,
   setDoc,
 } from 'firebase/firestore'
+import EmojiPicker from 'emoji-picker-react'
 import Comment from './Comment'
+import DropdownMenu from './DropdownMenu'
 import { useRecoilState } from 'recoil'
 import { likesModalState } from '@/atoms/likesModalAtom'
-import DropdownMenu from './DropdownMenu'
 import { deleteModalState } from '@/atoms/deleteModalAtom'
 import { modalState } from '@/atoms/modalAtom'
 
@@ -43,6 +44,7 @@ const Post = ({
   const [likes, setLikes] = useState([])
   const [liked, setLiked] = useState(false)
   const [seeMoreCaption, setSeeMoreCaption] = useState(false)
+  const [openEmojis, setOpenEmojis] = useState(false)
   const [openDeleteModal, setOpenDeleteModal] = useRecoilState(deleteModalState)
   const [openLikesModal, setOpenLikesModal] = useRecoilState(likesModalState)
   const [isOpen, setIsOpen] = useRecoilState(modalState)
@@ -103,6 +105,10 @@ const Post = ({
       comment: commentCopy,
       timestamp: serverTimestamp(),
     })
+  }
+
+  const handleEmoji = (emojiData, e) => {
+    setComment(comment + emojiData.emoji)
   }
 
   return (
@@ -208,24 +214,41 @@ const Post = ({
         </div>
       )}
       {session && (
-        <form className='flex items-center p-4'>
-          <FaceSmileIcon className='h-7' />
-          <input
-            type='text'
-            placeholder='Add a comment...'
-            className='flex-1 border-none focus:ring-0 outline-none scroll-smooth'
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            ref={commentRef}
-          />
-          <button
-            type='submit'
-            onClick={sendComment}
-            disabled={!comment.trim()}
-            className='font-semibold text-blue-500 disabled:cursor-not-allowed'
-          >
-            Post
-          </button>
+        <form className='flex flex-col p-4'>
+          <div className='flex flex-1 items-center'>
+            <FaceSmileIcon
+              className='h-7 cursor-pointer'
+              onClick={() => setOpenEmojis(!openEmojis)}
+            />
+            <input
+              type='text'
+              placeholder='Add a comment...'
+              className='flex-1 border-none focus:ring-0 outline-none scroll-smooth'
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              ref={commentRef}
+              onFocus={() => setOpenEmojis(false)}
+            />
+            <button
+              type='submit'
+              onClick={sendComment}
+              disabled={!comment.trim()}
+              className='font-semibold text-blue-500 disabled:cursor-not-allowed'
+            >
+              Post
+            </button>
+          </div>
+          <div className='z-10'>
+            {openEmojis && (
+              <EmojiPicker
+                emojiStyle='google'
+                width={'22rem'}
+                height={'25rem'}
+                onEmojiClick={handleEmoji}
+                skinTonePickerLocation='PREVIEW'
+              />
+            )}
+          </div>
         </form>
       )}
     </div>
