@@ -13,7 +13,7 @@ import DropdownMenu from './DropdownMenu'
 import { deleteModalState } from '@/atoms/deleteModalAtom'
 import { likesModalState } from '@/atoms/likesModalAtom'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { auth } from '@/firebase'
+import { auth, provider } from '@/firebase'
 
 const Header = ({ inLogIn }) => {
   // const { data: session } = useSession()
@@ -22,6 +22,7 @@ const Header = ({ inLogIn }) => {
   const [openDeleteModal, setOpenDeleteModal] = useRecoilState(deleteModalState)
   const [openLikesModal, setOpenLikesModal] = useRecoilState(likesModalState)
   const router = useRouter()
+
   const signIn = () => {
     signInWithPopup(auth, provider).catch(alert)
   }
