@@ -8,6 +8,15 @@
   }
 }
 
+@layer utilities {
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track-piece:start {
+    margin-top: 3.8rem;
+  }
+}
+
 @layer components {
   .headerIcon {
     @apply h-6 inline-flex transition-all hover:scale-125 duration-150 ease-out cursor-pointer;

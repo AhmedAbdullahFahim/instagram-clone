@@ -8,7 +8,7 @@ export default function Home() {
   const [people, setPeople] = useState([])
   const [postId, setPostId] = useState('')
   return (
-    <div className='bg-gray-50 h-screen overflow-y-scroll scrollbar-hide'>
+    <div className='bg-gray-50 h-screen overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-white'>
       <Head>
         <title>Instagram</title>
         <link rel='icon' href='/logo.png' />

@@ -14,7 +14,7 @@ const Feed = ({ setPeople, setPostId }) => {
       // className={`grid grid-cols-1 md:grid-cols-2 md:max-w-3xl xl:grid-cols-3 xl:max-w-6xl mx-auto ${
       //   !session && '!grid-cols-1 !max-w-4xl'
       // }`}
-      className={`grid grid-cols-1 md:grid-cols-2 md:max-w-3xl xl:grid-cols-3 xl:max-w-6xl mx-auto ${
+      className={`grid grid-cols-1 md:grid-cols-2 md:max-w-3xl xl:grid-cols-3 xl:max-w-6xl mx-auto overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-300 ${
         !user && '!grid-cols-1 !max-w-4xl'
       }`}
     >
