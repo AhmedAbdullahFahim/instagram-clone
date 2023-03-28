@@ -1,11 +1,13 @@
 import { faker } from '@faker-js/faker'
-import { useSession } from 'next-auth/react'
+// import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import Story from './Story'
-import { PlusIcon } from '@heroicons/react/24/solid'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '@/firebase'
 
 const Stories = () => {
-  const { data: session } = useSession()
+  // const { data: session } = useSession()
+  const [user] = useAuthState(auth)
   const [suggestions, setSuggestions] = useState([])
   useEffect(() => {
     const suggestions = [...Array(20)].map((_, i) => ({
@@ -21,10 +23,12 @@ const Stories = () => {
       {/* {session && (
         <Story username={session.user.username} img={session.user.image} />
       )} */}
-      {session && (
+      {/* {session && ( */}
+      {user && (
         <div className='relative'>
           <img
-            src={session.user.image}
+            // src={session.user.image}
+            src={user.photoURL}
             alt='story'
             className='h-14 w-14 rounded-full object-contain transition transform hover:scale-110 duration-150 ease-out cursor-pointer'
           />

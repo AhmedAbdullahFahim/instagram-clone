@@ -9,7 +9,7 @@ import {
 import { HeartIcon as HeartIconFilled } from '@heroicons/react/24/solid'
 import { useSession } from 'next-auth/react'
 import { useEffect, useRef, useState } from 'react'
-import { db } from '@/firebase'
+import { auth, db } from '@/firebase'
 import {
   addDoc,
   collection,
@@ -28,6 +28,7 @@ import { useRecoilState } from 'recoil'
 import { likesModalState } from '@/atoms/likesModalAtom'
 import { deleteModalState } from '@/atoms/deleteModalAtom'
 import { modalState } from '@/atoms/modalAtom'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 const Post = ({
   id,
@@ -48,7 +49,8 @@ const Post = ({
   const [openDeleteModal, setOpenDeleteModal] = useRecoilState(deleteModalState)
   const [openLikesModal, setOpenLikesModal] = useRecoilState(likesModalState)
   const [isOpen, setIsOpen] = useRecoilState(modalState)
-  const { data: session } = useSession()
+  // const { data: session } = useSession()
+  const [user] = useAuthState(auth)
   const commentRef = useRef(null)
 
   useEffect(
@@ -73,8 +75,11 @@ const Post = ({
 
   useEffect(
     () =>
+      // setLiked(
+      //   likes.findIndex((like) => like.id === session?.user?.uid) !== -1
+      // ),
       setLiked(
-        likes.findIndex((like) => like.id === session?.user?.uid) !== -1
+        likes.findIndex((like) => like.id === user?.uid) !== -1
       ),
     [likes]
   )
@@ -85,12 +90,18 @@ const Post = ({
 
   const likePost = async () => {
     if (liked) {
-      await deleteDoc(doc(db, 'posts', id, 'likes', session.user.uid))
+      // await deleteDoc(doc(db, 'posts', id, 'likes', session.user.uid))
+      await deleteDoc(doc(db, 'posts', id, 'likes', user.uid))
     } else {
-      await setDoc(doc(db, 'posts', id, 'likes', session.user.uid), {
-        username: session.user.username,
-        profileImage: session.user.image,
-        name: session.user.name,
+      // await setDoc(doc(db, 'posts', id, 'likes', session.user.uid), {
+      //   username: session.user.username,
+      //   profileImage: session.user.image,
+      //   name: session.user.name,
+      // })
+      await setDoc(doc(db, 'posts', id, 'likes', user.uid), {
+        username: user.displayName,
+        profileImage: user.photoURL,
+        name: user.displayName,
       })
     }
   }
@@ -100,8 +111,10 @@ const Post = ({
     const commentCopy = comment
     setComment('')
     await addDoc(collection(db, 'posts', id, 'comments'), {
-      username: session.user.username,
-      profileImage: session.user.image,
+      // username: session.user.username,
+      // profileImage: session.user.image,
+      username: user.displayName,
+      profileImage: user.photoURL,
       comment: commentCopy,
       timestamp: serverTimestamp(),
     })
@@ -120,7 +133,8 @@ const Post = ({
           className='h-12 w-12 rounded-full object-contain mr-3'
         />
         <p className='font-semibold flex-1'>{name}</p>
-        {session && (
+        {/* {session && ( */}
+        {user && (
           <DropdownMenu setPostId={setPostId} id={id} email={email} />
         )}
       </div>
@@ -138,7 +152,8 @@ const Post = ({
           />
         </div>
       </div>
-      {session && (
+      {/* {session && ( */}
+      {user && (
         <div className='flex justify-between p-4 items-center'>
           <div className='flex space-x-4'>
             {liked ? (
@@ -158,7 +173,8 @@ const Post = ({
           <BookmarkIcon className='headerIcon h-7' />
         </div>
       )}
-      <div className={`px-5 overflow-hidden ${!session && 'py-2'} mb-3`}>
+      {/* <div className={`px-5 overflow-hidden ${!session && 'py-2'} mb-3`}> */}
+      <div className={`px-5 overflow-hidden ${!user && 'py-2'} mb-3`}>
         {likes.length > 0 && (
           <p className='font-bold mb-1'>
             <span
@@ -213,7 +229,8 @@ const Post = ({
           ))}
         </div>
       )}
-      {session && (
+      {/* {session && ( */}
+      {user && (
         <form className='flex flex-col p-4'>
           <div className='flex flex-1 items-center'>
             <FaceSmileIcon

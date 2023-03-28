@@ -12,7 +12,6 @@ export default function Home() {
       <Head>
         <title>Instagram</title>
         <link rel='icon' href='/logo.png' />
-        <meta http-equiv="Content-Security-Policy" content="script-src 'self';" /> 
       </Head>
 
       <Header />

@@ -1,4 +1,4 @@
-import { db } from '@/firebase'
+import { auth, db } from '@/firebase'
 import { HeartIcon } from '@heroicons/react/24/outline'
 import { HeartIcon as HeartIconFilled } from '@heroicons/react/24/solid'
 import {
@@ -15,6 +15,7 @@ import { likesModalState } from '@/atoms/likesModalAtom'
 import Moment from 'react-moment'
 import { deleteModalState } from '@/atoms/deleteModalAtom'
 import { modalState } from '@/atoms/modalAtom'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 const Comment = ({ comment, id, setPeople }) => {
   const [seeMoreComment, setSeeMoreComment] = useState(false)
@@ -24,7 +25,8 @@ const Comment = ({ comment, id, setPeople }) => {
   const [openLikesModal, setOpenLikesModal] = useRecoilState(likesModalState)
   const [isOpen, setIsOpen] = useRecoilState(modalState)
 
-  const { data: session } = useSession()
+  // const { data: session } = useSession()
+  const [user] = useAuthState(auth)
 
   useEffect(
     () =>
@@ -39,24 +41,30 @@ const Comment = ({ comment, id, setPeople }) => {
 
   useEffect(
     () =>
-      setLiked(
-        likes.findIndex((like) => like.id === session?.user?.uid) !== -1
-      ),
+      // setLiked(
+      //   likes.findIndex((like) => like.id === session?.user?.uid) !== -1
+      // ),
+      setLiked(likes.findIndex((like) => like.id === user?.uid) !== -1),
     [likes]
   )
 
   const likeComment = async () => {
     if (liked) {
       await deleteDoc(
-        doc(db, 'posts', id, 'comments', comment.id, 'likes', session.user.uid)
+        // doc(db, 'posts', id, 'comments', comment.id, 'likes', session.user.uid)
+        doc(db, 'posts', id, 'comments', comment.id, 'likes', user.uid)
       )
     } else {
       await setDoc(
-        doc(db, 'posts', id, 'comments', comment.id, 'likes', session.user.uid),
+        // doc(db, 'posts', id, 'comments', comment.id, 'likes', session.user.uid),
+        doc(db, 'posts', id, 'comments', comment.id, 'likes', user.uid),
         {
-          username: session.user.username,
-          profileImage: session.user.image,
-          name: session.user.name,
+          // username: session.user.username,
+          // profileImage: session.user.image,
+          // name: session.user.name,
+          username: user.displayName,
+          profileImage: user.photoURL,
+          name: user.displayName,
         }
       )
     }
@@ -85,7 +93,7 @@ const Comment = ({ comment, id, setPeople }) => {
           ) : (
             <>
               {comment.data().comment.slice(0, 40).concat(' ')}
-              {comment.data().comment.length < 50 || (
+              {comment.data().comment.length < 40 || (
                 <span
                   className='text-gray-400 cursor-pointer'
                   onClick={() => setSeeMoreComment(true)}

@@ -1,6 +1,7 @@
 import { deleteModalState } from '@/atoms/deleteModalAtom'
 import { likesModalState } from '@/atoms/likesModalAtom'
 import { modalState } from '@/atoms/modalAtom'
+import { auth } from '@/firebase'
 import { Menu, Transition } from '@headlessui/react'
 import {
   ArrowRightOnRectangleIcon,
@@ -12,13 +13,15 @@ import {
 } from '@heroicons/react/24/outline'
 import { signOut, useSession } from 'next-auth/react'
 import { Fragment } from 'react'
+import { useAuthState } from 'react-firebase-hooks/auth'
 import { useRecoilState } from 'recoil'
 
 const DropdownMenu = ({ image, username, id, email, setPostId }) => {
   const [openDeleteModal, setOpenDeleteModal] = useRecoilState(deleteModalState)
   const [openLikesModal, setOpenLikesModal] = useRecoilState(likesModalState)
   const [isOpen, setIsOpen] = useRecoilState(modalState)
-  const { data: session } = useSession()
+  // const { data: session } = useSession()
+  const [user] = useAuthState(auth)
   return (
     <Menu>
       <Menu.Button>
@@ -64,7 +67,8 @@ const DropdownMenu = ({ image, username, id, email, setPostId }) => {
                   className={`${
                     active ? 'bg-gray-200' : 'text-gray-900'
                   } group flex space-x-3 font-medium w-full items-center rounded-md px-2 py-2 text-sm cursor-pointer`}
-                  onClick={signOut}
+                  // onClick={signOut}
+                  onClick={() => auth.signOut()}
                 >
                   <ArrowRightOnRectangleIcon className='h-10 w-10 p-2 rounded-full' />
                   <p>Log Out</p>
@@ -86,7 +90,8 @@ const DropdownMenu = ({ image, username, id, email, setPostId }) => {
                 </div>
               )}
             </Menu.Item>
-            {session.user.email === email && (
+            {/* {session.user.email === email && ( */}
+            {user.email === email && (
               <Menu.Item>
                 {({ active }) => (
                   <div
@@ -106,7 +111,8 @@ const DropdownMenu = ({ image, username, id, email, setPostId }) => {
                 )}
               </Menu.Item>
             )}
-            {session.user.email !== email && (
+            {/* {session.user.email !== email && ( */}
+            {user.email !== email && (
               <Menu.Item>
                 {({ active }) => (
                   <div

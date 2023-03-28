@@ -5,20 +5,26 @@ import {
   HeartIcon,
   PaperAirplaneIcon,
 } from '@heroicons/react/24/outline'
-import { useSession, signOut, signIn } from 'next-auth/react'
+// import { useSession, signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil'
 import { modalState } from '@/atoms/modalAtom'
 import DropdownMenu from './DropdownMenu'
 import { deleteModalState } from '@/atoms/deleteModalAtom'
 import { likesModalState } from '@/atoms/likesModalAtom'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '@/firebase'
 
 const Header = ({ inLogIn }) => {
-  const { data: session } = useSession()
+  // const { data: session } = useSession()
+  const [user] = useAuthState(auth)
   const [isOpen, setIsOpen] = useRecoilState(modalState)
   const [openDeleteModal, setOpenDeleteModal] = useRecoilState(deleteModalState)
   const [openLikesModal, setOpenLikesModal] = useRecoilState(likesModalState)
   const router = useRouter()
+  const signIn = () => {
+    signInWithPopup(auth, provider).catch(alert)
+  }
   return (
     <div className='shadow-sm sticky top-0 z-30 border-b bg-white'>
       <div className='max-w-6xl flex justify-between mx-5 lg:mx-auto py-2 sm:py-0 items-center'>
@@ -46,7 +52,8 @@ const Header = ({ inLogIn }) => {
           </div>
         </div>
         <div className='flex items-center justify-end space-x-4'>
-          {session ? (
+          {/* {session ? ( */}
+          {user ? (
             <>
               <PlusCircleIcon
                 onClick={() => {
@@ -64,13 +71,15 @@ const Header = ({ inLogIn }) => {
                 </div>
               </div>
               <DropdownMenu
-                image={session.user.image}
-                username={session.user.username}
+                // image={session.user.image}
+                // username={session.user.username}
+                image={user.photoURL}
+                username={user.displayName}
               />
             </>
           ) : (
             !inLogIn && (
-              <button className='font-semibold' onClick={signIn}>
+              <button className='font-semibold' onClick={() => signIn()}>
                 Sign In
               </button>
             )

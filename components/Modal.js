@@ -1,4 +1,4 @@
-import { db, storage } from '@/firebase'
+import { auth, db, storage } from '@/firebase'
 import {
   addDoc,
   collection,
@@ -22,6 +22,7 @@ import { useSession } from 'next-auth/react'
 import { deleteModalState } from '@/atoms/deleteModalAtom'
 import { likesModalState } from '@/atoms/likesModalAtom'
 import EmojiPicker from 'emoji-picker-react'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 const Modal = ({ likes, postId }) => {
   const [isOpen, setIsOpen] = useRecoilState(modalState)
@@ -32,7 +33,8 @@ const Modal = ({ likes, postId }) => {
   const [selectedFile, setSelectedFile] = useState(null)
   const [loading, setLoading] = useState(false)
   const [openEmojis, setOpenEmojis] = useState(false)
-  const { data: session } = useSession()
+  // const { data: session } = useSession()
+  const [user] = useAuthState(auth)
 
   const addImageToPost = (e) => {
     const reader = new FileReader()
@@ -53,10 +55,13 @@ const Modal = ({ likes, postId }) => {
     setLoading(true)
 
     const docRef = await addDoc(collection(db, 'posts'), {
-      username: session.user.username,
-      email: session.user.email,
+      // username: session.user.username,
+      // email: session.user.email,
+      // profileImg: session.user.image,
+      username: user.displayName,
+      email: user.email,
+      profileImg: user.photoURL,
       caption: captionRef.current.value,
-      profileImg: session.user.image,
       timestamp: serverTimestamp(),
     })
 
