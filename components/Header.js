@@ -14,6 +14,7 @@ import { deleteModalState } from '@/atoms/deleteModalAtom'
 import { likesModalState } from '@/atoms/likesModalAtom'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth, provider } from '@/firebase'
+import { signInWithPopup } from 'firebase/auth'
 
 const Header = ({ inLogIn }) => {
   // const { data: session } = useSession()
